@@ -17,7 +17,7 @@
 .dd-empty,
 .dd-placeholder { display: block; position: relative; margin: 0; padding: 0; min-height: 20px; font-size: 13px; line-height: 20px; }
 
-.dd-handle { display: block; height: 30px; margin: 5px 0; padding: 5px 10px; color: #A12E36; text-decoration: none; font-weight: bold; border: 1px solid #A12E36;
+.dd-handle { display: block; height: 30px; margin: 5px 0; padding: 5px 10px; color: #A12E36; text-decoration: none; font-weight: bold; border: 1px solid #A12E36; white-space: nowrap;
     background: #ECD9A6; /* Old browsers */
     background: -moz-linear-gradient(top,  #ECD9A6 0%, #FFFAED 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ECD9A6), color-stop(100%,#FFFAED)); /* Chrome,Safari4+ */

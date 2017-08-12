@@ -21,19 +21,19 @@ function getQueryParam(variable, defaultValue) {
 
 function animateRed(nodeToGlow){
 	nodeToGlow
-        .animate({'background-color':'#A12E36'},200)
+        .animate({'background-color':'#FF8F86'},200)
         .animate({'background-color':'#FFFAED'},200)
-        .animate({'background-color':'#A12E36'},200)
+        .animate({'background-color':'#FF8F86'},200)
         .animate({'background-color':'#FFFAED'},200)
-        .animate({'background-color':'#A12E36'},200)
+        .animate({'background-color':'#FF8F86'},200)
         .animate({'background-color':'#FFFAED'},200);
 }
 
 function animateGreen(nodeToGlow){
 	nodeToGlow
-        .animate({'background-color':'#7A9B2C'},200)
+        .animate({'background-color':'#E3F5B6'},200)
         .animate({'background-color':'#FFFAED'},200)
-        .animate({'background-color':'#7A9B2C'},200)
+        .animate({'background-color':'#E3F5B6'},200)
         .animate({'background-color':'#FFFAED'},200);
 
 }
