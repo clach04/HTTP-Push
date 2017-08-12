@@ -1578,6 +1578,9 @@ function testHttp() {
     var method = $('#requestTypeList option:selected').text();
     var headers = headerHtmlToArray();
 
+    console.log("HEADERS:");
+    console.log(JSON.stringify(headers));
+
     var xhr = new XMLHttpRequest();
     xhr.open(method, endpointURL, true);
     xhr.timeout = 10000;
@@ -1591,7 +1594,7 @@ function testHttp() {
             val = headers[i][key].trim();
             if (key && val) {
                 console.log("Setting header: " + key + ": " + val);
-                //xhr.setRequestHeader(key, val);
+                xhr.setRequestHeader(key, val);
             }
             if (key.toLowerCase() == "content-type") {
                 overrideContentType = true;
