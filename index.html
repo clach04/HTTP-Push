@@ -647,7 +647,7 @@
                             <div class="item-input-wrapper" style="height: 100px;">
                                 <label id="validationFeedbackLabel" style="position: absolute; top: 50%;transform: translateY(-50%);"></label>
                                 <textarea id="jsonPostJsonInput" style="height: 100px;" type="text" class="item-input" name="input-1"></textarea>
-                                <input id="checkJsonButton" onclick="verifyJson($('#jsonPostJsonInput').val(),true);" type="button" class="item-button item-input-button" value="Check Format" style="top: 70px; right: 20px; width: 120px;">
+                                <input id="checkJsonButton" onclick="if(verifyJson($('#jsonPostJsonInput').val(),true)){animateGreen($('#jsonPostJsonInput'));}else{animateRed($('#jsonPostJsonInput'));};" type="button" class="item-button item-input-button" value="Check Format" style="top: 70px; right: 20px; width: 120px;">
                             </div>
                         </label>
                     </div>
