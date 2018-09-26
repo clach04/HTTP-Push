@@ -1,6 +1,7 @@
 # HTTP-Push
 
-Available from the Pebble AppStore https://apps.getpebble.com/en_US/application/567af43af66b129c7200002b
+Available from the Pebble AppStore https://apps.rebble.io/en_US/application/567af43af66b129c7200002b?section=watchapps
+Also see https://www.youtube.com/watch?v=BL3GRCVes80
 
 Home automation extension for Classic Pebble and Pebble Time (Aplite, Basalt, and Chalk support). Customize HTTP Request on your phone and trigger the call from your Pebble Watch.
 
