@@ -1,0 +1,246 @@
+.title {
+    padding: 0 10px;
+    text-transform: uppercase;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #888888;
+    text-align: center;
+}
+
+#testResults {
+    font-family: 'PT Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #888888;
+}
+
+.addNewButton {
+    text-align: center;
+}
+
+.pendingResponse {
+    background-image: url(/images/rolling.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.item.add-item {
+    display: none;
+}
+
+div.modify {
+    content: url(/images/gear.png);
+    width: 25px;
+    height: 25px;
+    right: 7.5px;
+    top: 7.5px;
+    position: absolute;
+    border-radius: 6px;
+}
+
+div.dd-modify {
+    content: url(/images/gear.png);
+}
+
+footer {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 35 px;
+    /* 35 = (copyright + contact), 20 = (github) */
+    width: 100%;
+    background: #999;
+}
+
+.footer-text {
+    font-family: helvetica;
+    font-size: 10px;
+    text-align: center;
+    line-height: 15px;
+}
+
+.git-like {
+    top: 10px;
+    right: 10px;
+    position: absolute;
+    z-index: 100;
+    width: 80px;
+    height: 20px;
+}
+
+::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: #A12E36;
+    opacity: 0.5;
+}
+
+:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #A12E36;
+    opacity: 0.5;
+}
+
+::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #A12E36;
+    opacity: 0.5;
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #A12E36;
+    opacity: 0.5;
+}
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #A12E36;
+    opacity: 0.5;
+}
+
+.headerRowLeft {
+    padding: 2px;
+    font-weight: bold;
+    font-size: .7em;
+    color: #A12E37;
+    float: left;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.headerRowRight {
+    padding: 2px;
+    font-size: .7em;
+    color: #A12E37;
+    float: right;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.headerRow {
+    margin-left: 20px;
+    margin-right: 20px;
+    border-bottom: 1px solid #A12E36;
+    overflow: auto;
+    border-top: none;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin: 0 0 30px;
+    /* bottom = footer height */
+}
+
+#footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 30px;
+    width: 100%;
+}
+
+.tooltip {
+    position: absolute;
+    padding: 10px 13px;
+    z-index: 6;
+    margin: 25px;
+    /*background-color: #f5f5b5;*/
+    background-color: #FFFAED;
+    border: 1px solid #A12E36;
+    font-family: helvetica;
+    text-transform: none;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: left;
+    font-weight: normal;
+}
+
+.tooltip-background {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 500%;
+    z-index: 5;
+    background: #A12E37;
+    opacity: .8;
+    pointer-events: none;
+}
+
+.update-background {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    opacity: .9;
+    background: -webkit-radial-gradient(top left, #FFFAED, #A12E37, #A12E37, #A12E37, #A12E37, #A12E37, #A12E37);
+    background: radial-gradient(at top left, #FFFAED, #A12E37, #A12E37, #A12E37, #A12E37, #A12E37, #A12E37);
+}
+
+.glyphicon-offset {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    margin-top: 1px;
+    color: #A12E37;
+    font-style: normal;
+}
+
+.hamburger-label {
+    font-size: 10px;
+    color: rgb(255, 250, 237);
+}
+
+.hamburger-img {
+    vertical-align: middle;
+    max-width: 14px;
+    max-height: 14px;
+    width: 0px;
+}
+
+@media (max-width:350px) {
+    .hamburger-label {
+        font-size: 10px;
+        color: rgb(255, 250, 237);
+        line-height: 8px;
+        vertical-align: top;
+    }
+    .img-helper {
+        vertical-align: middle;
+    }
+}
+
+@media (min-width:350px) {
+    .hamburger-label {
+        font-size: 10px;
+        color: rgb(255, 250, 237);
+    }
+    .img-helper {
+        display: inline-block;
+        vertical-align: middle;
+        height: 100%;
+    }
+}
+
+
+
+[tooltip]:before {
+  bottom: 2px;
+  color: #ECD9A6;
+  content: attr(tooltip);
+  visibility: visible;
+  opacity: 1;
+  margin-right: 8px;
+  position: absolute;
+  right: 100%;
+  white-space: nowrap;
+}

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>HTTP Push Configuration Page</title>
+    <style>
+    /* Paste this css to your style sheet file or under head tag */
+
+    .no-js #loader {
+        display: none;
+    }
+
+    .js #loader {
+        display: block;
+        position: absolute;
+        left: 100px;
+        top: 0;
+    }
+
+    .pageLoadingBackground {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 20;
+        background-color: #A12E37;
+        /*background: url(/images/Preloader_9.gif) center no-repeat #fff;*/
+    }
+
+    .pageLoadingBackground img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .
+    </style>
+    <script src='./js/jquery-2.1.4.min.js'></script>
+    <script src='./js/jquery.color.min.js'></script>
+    <script>
+    //paste this code under head tag or in a seperate js file.
+    // Wait for window load
+    $(window).load(function() {
+        // Animate loader off screen
+        $("body").css("background-color", "#ECD9A6");
+        $(".multi-action").css("bottom", "-10%");
+        $("#footer").show();
+        $(".pageLoadingBackground").fadeOut(1000, function() {
+            $("#content").slideDown(1000, function() {
+                $(".multi-action").animate({
+                    bottom: '10%'
+                }, 300);
+
+            });
+
+            if (currentList.length == 0 || currentList == null) {
+                if ($('#reorderFields').is(":visible")) $('#reorderFields').hide();
+                $('#emptyMessageField').show();
+            }
+        });
+        //$(this).attr('src','/images/folder_demo.gif');
+        $("#reorder-demo").attr('src', './images/rolling_inv.gif');
+        $('<img />').load(function() {
+            $("#reorder-demo").attr('src', './images/folder_demo.gif');
+        }).attr('src', './images/folder_demo.gif');
+    });
+    </script>
+    <link rel='stylesheet' type='text/css' href='./css/reset.css'>
+    <link rel='stylesheet' type='text/css' href='./bower_components/Slate/dist/css/slate.min.css?v3.1.0'>
+    <link rel='stylesheet' type='text/css' href='./css/dd.css?v3.1.0'>
+    <link rel='stylesheet' type='text/css' href='./css/style.css?v3.1.0'>
+    <link rel='stylesheet' type='text/css' href='./css/bootstrap-glyphicons.css?v3.1.0'>
+    <link rel='stylesheet' type='text/css' href='./css/hamburger.min.css?v3.1.0'>
+    <link rel="stylesheet/less" type="text/css" href="./css/style.less" />
+    <link rel='stylesheet' type='text/css' href='./css/font-awesome.min.css'>
+</head>
+
+<body style="background-color: #A12E37;">
+    <div id="hamburger-menu">
+        <div id="ham-back" style="position:absolute; height:50px;width:0%;border-bottom: 1px solid #A12E36;background-color:#FFFAED;top:0px;"></div>
+        <button style="z-index: 7; top: 2.5px; left: 0px;" onclick="toggleHamburger();" class="hamburger hamburger--arrow" type="button">
+            <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+            </span>
+        </button>
+        <div id='hamburger-slice' style="z-index: 3;position:absolute;left: 60px;top: 0px; right: 0px; height: 60px; overflow:hidden;">
+            <!-- SETTINGS BUTTON -->
+            <div id='settingsButton' onclick='showHamburgerDisplay("settings");' style="background-color: #A12E36;text-align: center;position:relative;top:7.5px;float:left;width:0%;height:35px;border-radius:5px;margin-right:0.5%;margin-left:0.5%;">
+                <span class="img-helper"></span>
+                <img class="hamburger-img" src="./images/settings.png">
+                <label class='hamburger-label' style="color:rgb(255, 250, 237);">Settings</label>
+                </img>
+            </div>
+            <!-- BACKUP BUTTON -->
+            <div id='backupButton' onclick='showHamburgerDisplay("backup");' style="background-color: #A12E36;text-align: center;position:relative;top:7.5px;float:left;width:0%;height:35px;border-radius:5px;5px;margin-right:0.5%;margin-left:0.5%;">
+                <span class="img-helper"></span>
+                <img class="hamburger-img" src="./images/save.png">
+                <label class='hamburger-label'>Backup</label>
+                </img>
+            </div>
+            <!-- CHANGELOG BUTTON -->
+            <div id='changelogButton' onclick='showHamburgerDisplay("changelog")' style="background-color: #A12E36;text-align: center;position:relative;top:7.5px;float:left;width:0%;height:35px;border-radius:5px;5px;margin-right:0.5%;margin-left:0.5%;">
+                <span class="img-helper"></span>
+                <img class="hamburger-img" src="./images/log.png">
+                <label class='hamburger-label'>Change</label>
+                </img>
+            </div>
+            <!-- REPORT BUTTON -->
+            <div id='reportButton' onclick='showHamburgerDisplay("report");' style="background-color: #A12E36;text-align: center;position:relative;top:7.5px;float:left;height:35px; width:0%;border-radius:5px;5px;margin-right:0.5%;margin-left:0.5%;">
+                <span class="img-helper"></span>
+                <img class="hamburger-img" src="./images/bug.png">
+                <label class='hamburger-label'>Report</label>
+                </img>
+            </div>
+            <!-- DONATE BUTTON -->
+            <div id='donateButton' onclick='showHamburgerDisplay("donate");' style="background-color: #A12E36;text-align: center;position:relative;top:7.5px;float:left;width:0%;height:35px;border-radius:5px;5px;margin-right:0.5%;margin-left:0.5%;">
+                <span class="img-helper"></span>
+                <img class="hamburger-img" src="./images/beer.png">
+                <label class='hamburger-label'>Support</label>
+                </img>
+            </div>
+            <!-- ABOUT BUTTON -->
+            <div id='aboutButton' onclick='showHamburgerDisplay("about")' style="background-color: #A12E36;text-align: center;position:relative;top:7.5px;float:left;width:0%;height:35px;border-radius:5px;5px;margin-right:0.5%;margin-left:0.5%;">
+                <span class="img-helper"></span>
+                <img class="hamburger-img" src="./images/info.png">
+                <label class='hamburger-label'>About</label>
+                </img>
+            </div>
+        </div>
+    </div>
+    <div class='tooltip-background' onclick="tooltipBackgroundClicked()"></div>
+    <div class='update-background' onclick="$(this).hide()"></div>
+    <div id="update-tooltip"></div>
+    <div id="v4_0-tooltip"></div>
+    <div class="pageLoadingBackground">
+        <table style="height:100%;width: 100%;margin: 0;padding: 0; border: 0;">
+            <tr>
+                <td style="vertical-align: middle;text-align: center;"><img src="./images/dog.gif"></td>
+            </tr>
+        </table>
+    </div>
+    <div class='multi-action' style='z-index: 11'>
+        <button onclick="addFABclicked();" class='action-button'><span class='fa fa-plus'></span></button>
+        <ul class='actions'>
+            <li><a onclick="showCreateFolderDisplay();" tooltip="Add Folder"><span class='fa fa-folder'></span></a></li>
+            <li><a onclick="showCreateDisplay(null);" tooltip="Add Request"><span class='fa fa-tasks'></span></a></li>
+        </ul>
+    </div>
+    <div id="content" style="display: none;">
+        <div id='emptyMessageField' class="item-container" style='display:none;'>
+            <div class="item-container-content">
+                <label class="item">
+                    <label>
+                        <div style="padding-left:20px;text-align: center;">
+                            <br>
+                            <div style="font-weight: bold;font-size: 15px;color: #A12E37;">Empty List</div>
+                            <br>
+                            <br>
+                            <div style="font-size: 11px;color: #A12E37;">Start by creating a new request!</div>
+                            <br>
+                        </div>
+                    </label>
+                </label>
+            </div>
+        </div>
+        <div id='reorderFields' class='item-container'>
+            <div class="item-container">
+                <div class="item-container-header">Reorder List <i id="reorder-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content" id="nestableListField">
+                    <div class="cf nestable-lists">
+                        <div class="dd" id="nestable">
+                            <ol class="dd-list" id="dd-root">
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='backupFields' class='item-container'>
+            <div class="item-container">
+                <!-- field to enter name of the request -->
+                <div class="item-container-header">Copy Data <i id="backup-save-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content">
+                    <label class="item">
+                        <div class="item-input-wrapper" style="border:none;">
+                            <textarea id="saveData" readonly style="height: 100px;" type="text" class="item-input" name="input-1" onclick="this.focus();this.select()"></textarea>
+                        </div>
+                    </label>
+                </div>
+                <div class="item-container">
+                    <div class="button-container">
+                        <button class="btn item-button" onclick="alertify.logPosition('top right').success('Copied Data');" data-clipboard-target="#saveData"> COPY TO CLIPBOARD </button>
+                    </div>
+                </div>
+                <br/>
+                <div class="item-container-header">Load Data <i id="backup-load-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content">
+                    <label class="item">
+                        <div class="item-input-wrapper">
+                            <textarea id="loadData" style="height: 100px;" type="text" class="item-input" name="input-1"></textarea>
+                        </div>
+                    </label>
+                </div>
+                <br/>
+                <div class="item-container">
+                    <div class="button-container">
+                        <input onclick="loadBackupData();" type="button" class="item-button" value="Load Data">
+                    </div>
+                </div>
+                <div class="item-container">
+                    <div class="button-container">
+                        <input onclick="showModifyDisplay();" type="button" class="item-button" value="Close">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- REPORT FIELDS -->
+        <div id='reportFields' class='item-container'>
+            <div class="item-container">
+                <!-- field to enter name of the request -->
+                <div class="item-container-header">Report a Bug <i id="report-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container">
+                    <div class="button-container">
+                        <a href="mailto:swkonagaya@gmail.com">
+                            <input type="button" class="item-button" value="Email Developer">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="button-container">
+                    <input onclick="showModifyDisplay();" type="button" class="item-button" value="Close">
+                </div>
+            </div>
+        </div>
+        <!-- SETTINGS FIELDS -->
+        <div id='settingsFields' class='item-container'>
+            <div id="settingsPadding" class="item-container" style="display: flex; flex-direction: column;">
+                <!-- field to enter name of the request -->
+                <div class="item-container-header">Vibration Duration (in milliseconds) <i id="vibration-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content">
+                    <label class="item">
+                        <div class="item-input-wrapper" style="height:25px;">
+                            <select id='vibeDurationList' name='select-1' class='item-select'>
+                                <option class='item-select-option'>100</option>
+                                <option class='item-select-option'>300</option>
+                                <option class='item-select-option'>500</option>
+                                <option class='item-select-option'>0 (Disable Vibrations)</option>
+                            </select>
+                        </div>
+                    </label>
+                </div>
+                <div class="item-container">
+                    <div class="item-container-header">Folder Icon <i id="folder-icon-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content">
+                        <label class="item" style="font-size: 12px;color:#A12E37;">
+                            Display Folder Icon next to Folders
+                            <input id="showFolderIconCheckbox" type="checkbox" class="item-toggle" name="toggle-1">
+                        </label>
+                    </div>
+                </div>
+                <div class="item-container">
+                    <div class="item-container-header">Show Status Bar <i id="show-status-bar-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content">
+                        <label class="item" style="font-size: 12px;color:#A12E37;">
+                            Display Status Bar containing the time
+                            <input id="showStatusBarCheckbox" type="checkbox" class="item-toggle" name="toggle-1">
+                        </label>
+                    </div>
+                </div>
+                <br>
+                <div id="colorPickerFields">
+                    <div class="item-container-header">Watch Background Color <i id="background-color-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content" style="width: 100%; display: table;">
+                        <div style="display: table-row;text-align: center;">
+                            <label class="item backgroundFrame" id="backgroundPickerFrame" style="width: 600px; display: table-cell;">
+                                <input id="backgroundColorPicker" onclick="$('#backgroundCloseButton').show(500);" class="item-input-wrapper item-input" style="height:35px; background-color: black; border:1px dashed #A12E37;text-align:center;padding:0px;border-radius: 5px;" value="#FFFFFF">
+                                </input>
+                            </label>
+                            <label class="item backgroundFrame" id="backgroundCloseButton" style="display: table-cell;border-top: none; vertical-align: middle;">
+                                <input type="button" onclick="$('#backgroundCloseButton').hide();" class="item-button" value="Close" style="width: 100%;">
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="item-container-header ">Watch Highight Text Color <i id="foreground-color-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content" style="width: 100%; display: table;">
+                        <div style="display: table-row;text-align: center;">
+                            <label class="item foregroundFrame" id="foregroundPickerFrame" style="width: 600px; display: table-cell;">
+                                <input id="foregroundColorPicker" onclick="$('#foregroundCloseButton').show(500);" class="item-input-wrapper item-input" style="height:35px; background-color: black;border:1px dashed #A12E37;text-align:center;padding:0px;border-radius: 5px;" value="#FFFFFF">
+                                </input>
+                            </label>
+                            <label class="item foregroundFrame" id="foregroundCloseButton" style="display: table-cell;border-top: none; vertical-align: middle;">
+                                <input type="button" onclick="$('#foregroundCloseButton').hide();" class="item-button" value="Close" style="width: 100%;">
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="item-container-header">Watch Highlight Color <i id="selected-color-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content" style="width: 100%; display: table;">
+                        <div style="display: table-row;text-align: center;">
+                            <label class="item selectedFrame" id="selectedPickerFrame" style="width: 600px; display: table-cell;">
+                                <input id="selectedColorPicker" onclick="$('#selectedCloseButton').show(500);" class="item-input-wrapper item-input" style="height:35px; background-color: black;border:1px dashed #A12E37;text-align:center;padding:0px;border-radius: 5px;" value="#FFFFFF">
+                                </input>
+                            </label>
+                            <label class="item selectedFrame" id="selectedCloseButton" style="display: table-cell;border-top: none; vertical-align: middle;">
+                                <input type="button" onclick="$('#selectedCloseButton').hide();" class="item-button" value="Close" style="width: 100%;">
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="item-container-header">Watch Status Bar Color <i id="status-bar-color-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content" style="width: 100%; display: table;">
+                        <div style="display: table-row;text-align: center;">
+                            <label class="item statusBarFrame" id="statusBarPickerFrame" style="width: 600px; display: table-cell;">
+                                <input id="statusBarColorPicker" onclick="$('#statusBarCloseButton').show(500);" class="item-input-wrapper item-input" style="height:35px; background-color: black;border:1px dashed #A12E37;text-align:center;padding:0px;border-radius: 5px;" value="#FFFFFF">
+                                </input>
+                            </label>
+                            <label class="item statusBarFrame" id="statusBarCloseButton" style="display: table-cell;border-top: none; vertical-align: middle;">
+                                <input type="button" onclick="$('#statusBarCloseButton').hide();" class="item-button" value="Close" style="width: 100%;">
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <!--
+            <div id="resetButton" class="item-container">
+                <div class="button-container">
+                    <input onclick="resetData();" type="button" class="item-button" value="Reset Data">
+                </div>
+            </div>
+            -->
+            <div class="item-container">
+                <div class="button-container">
+                    <input onclick="showModifyDisplay();" type="button" class="item-button" value="Close">
+                </div>
+            </div>
+        </div>
+        <!-- CHANGELOG FIELDS -->
+        <div id='changelogFields' class='item-container'>
+            <div class="item-container">
+                <!-- field to enter name of the request -->
+                <div class="item-container-header">Version 4.0.0 </div>
+                <div class="item-container-content">
+                    <label style="padding: 3px;left:20px;font-size: 12px;color: #A12E37;" class="item">
+                        <label>
+                            <ul style=\ "padding-left:20px\">
+                                <li>Header customization</li>
+                                <li>Added button to copy backup data to clipboard</li>
+                                <li>HTTPS Enforcement</li>
+                                <li>Color support</li>
+                                <li>Status bar with time</li>
+                                <li>Folder Icons</li>
+                                <li>Response customization</li>
+                                <li>UI Upgrade</li>
+                                <li>Minor text fixes</li>
+                            </ul>
+                        </label>
+                    </label>
+                </div>
+                <br/>
+                <div class="item-container-header">Version 3.1.0 </div>
+                <div class="item-container-content">
+                    <label style="padding: 3px;left:20px;font-size: 12px;color: #A12E37;" class="item">
+                        <label>
+                            <ul style=\ "padding-left:20px\">
+                                <li>Version awareness</li>
+                                <li>Vibration length now configurable</li>
+                                <li>Restore requests from backup</li>
+                                <li>Report bugs</li>
+                                <li>View changelogs</li>
+                                <li>Fixed crashing when request size too large</li>
+                                <li>Fixed crash when assigning multiple nested folders</li>
+                            </ul>
+                        </label>
+                    </label>
+                </div>
+                <br/>
+            </div>
+            <div class="item-container">
+                <div class="button-container">
+                    <input onclick="showModifyDisplay();" type="button" class="item-button" value="Close">
+                </div>
+            </div>
+        </div>
+        <!-- ABOUT FIELDS -->
+        <div id='aboutFields' class='item-container'>
+            <div class="item-container">
+                <!-- field to enter name of the request -->
+                <div class="item-container-header">Version </div>
+                <div class="item-container-content">
+                    <label style="padding: 3px;left:20px;font-size: 12px;color: #A12E37;" class="item">
+                        <label>4.0.0</label>
+                    </label>
+                </div>
+                <br/>
+                <div class="item-container-header">Author </div>
+                <div class="item-container-content">
+                    <label style="padding: 3px;left:20px;font-size: 12px;color: #A12E37;" class="item">
+                        <label>Sean Konagaya</label>
+                    </label>
+                </div>
+                <br/>
+                <div class="item-container-header">Icon License </div>
+                <div class="item-container-content">
+                    <label style="padding: 3px;left:20px;font-size: 12px;color: #A12E37;" class="item">
+                        <label>Designed by Freepik & Twitter Bootstrap</label>
+                    </label>
+                </div>
+                <br/>
+            </div>
+            <div class="item-container">
+                <div class="button-container">
+                    <input onclick="showModifyDisplay();" type="button" class="item-button" value="Close">
+                </div>
+            </div>
+        </div>
+        <!-- DONATE FIELDS -->
+        <div id='donateFields' class='item-container'>
+            <div class="item-container">
+                <div class="item-container-header">Support on Github <i id="github-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content" style="padding-top:15px;">
+                    <label class="item">
+                        <label>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=skonagaya&repo=http-push&type=star&count=true" frameborder="0" scrolling="0" width="160px" height="30px" style="margin-left: 10px"></iframe>
+                            <br>
+                            <iframe src="https://ghbtns.com/github-btn.html?user=skonagaya&type=follow&count=true" frameborder="0" scrolling="0" width="220px" height="30px" style="margin-left: 10px"></iframe>
+                        </label>
+                    </label>
+                </div>
+                <!-- field to enter name of the request -->
+                
+                <div class="item-container-header">Make a Donation <i id="donate-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content">
+                    <label class="item" >
+                        <label>
+                            <div class="item-container">
+                                <div class="button-container">
+                                    <input onclick="paypalWarning();" type="button" class="item-button" value="Paypal Donation">
+                                </div>
+                            </div>
+                            <div class="button-container">
+                                <form id="paypalForm" style="text-align: center;" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                                    <input type="hidden" name="cmd" value="_s-xclick">
+                                    <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+          ">
+                                    <input id="paypalButton" value="Paypal Donation" type="submit" class="item-button" name="submit" alt="PayPal - The safer, easier way to pay online!" style="display:none">
+                                </form>
+                            </div>
+                        </label>
+                    </label>
+                </div>
+                
+            </div>
+            <div class="item-container-header">Bitcoin Tipjar </div>
+            <div class="item-container-content">
+                <label style="font-size: 12px;" class="item">
+                    <label style="text-align: center">
+                        <div style=""><img src="./images/bitcoin.png" /></div>
+                        <div class="btcbtn" style="" onclick="alertify.logPosition('top right').success('Copied Address');" data-clipboard-target="#tipjarHash" style="text-align: center">
+                            <br>
+                            <textarea style="text-align:center;" id="tipjarHash" readonly type="text" class="btcbtn item-input" name="input-1" onclick="this.focus();this.select()">1GsoRK5FPbVzm2fRJv3AQ4mVRe9ubUrEUH</textarea>
+                        </div>
+                    </label>
+                </label>
+            </div>
+            <div class="item-container">
+                <div class="button-container">
+                    <input onclick="showModifyDisplay();" type="button" class="item-button" value="Close">
+                </div>
+            </div>
+        </div>
+        <!-- The list of items that are draggable and dynamically created -->
+        <div id='createNewFolderFields' class='item-container'>
+            <div class="item-container">
+                <!-- field to enter name of the request -->
+                <div class="item-container-header">Folder Display Name <i id="folder-name-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content">
+                    <label class="item">
+                        <div class="item-input-wrapper">
+                            <input id="folderDisplayedName" maxlength="30" type="text" class="item-input" name="input-1">
+                        </div>
+                    </label>
+                </div>
+                <!--
+        <div class="item-container-footer">
+          Enter the name of the folder that will be displayed on your pebble. Shorten as necessary so that it fits on your pebble screen. Maximum length is 30 characters.
+        </div>
+        -->
+                <div class="item-container">
+                    <div class="button-container">
+                        <input id="createNewFolderButton" onclick="createNewFolder();" type="button" class="item-button" value="Save Folder">
+                        <input id="modifyExistingFolderButton" onclick="modifyExistingFolder();" type="button" class="item-button" value="Save Folder">
+                    </div>
+                </div>
+                <div class="item-container">
+                    <div class="button-container">
+                        <input onclick="showModifyDisplay();" type="button" class="item-button" value="Cancel">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- New item form -->
+        <div id='createNewFields' class='item-container'>
+            <div class="item-container">
+                <div class="item-container-header">Request or Response <i id="request-response-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content">
+                    <div class="item tab-buttons">
+                        <a name="tab-1" id="Request" onclick="$('#requestFields').show();$('#responseFields').hide();" class="tab-button active">REQUEST</a>
+                        <a name="tab-1" id="Response" onclick="$('#requestFields').hide();$('#responseFields').show();" class="tab-button">RESPONSE</a>
+                    </div>
+                </div>
+            </div>
+            <div id="requestFields">
+                <div class="item-container">
+                    <div class="item-container-header">Templates <i id="template-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content">
+                        <label class="item">
+                            <div class="item-input-wrapper" style="height:25px;">
+                                <select id='templateList' name='select-1' class='item-select'>
+                                    <option class='item-select-option'>Select a template</option>
+                                </select>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="item-container">
+                    <div class="item-container-header">Request Method <i id="request-type-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content">
+                        <label class="item">
+                            <div class="item-input-wrapper" style="height:25px;">
+                                <select id='requestTypeList' name='select-1' class='item-select'>
+                                    <option class='item-select-option'>GET</option>
+                                    <option class='item-select-option'>POST</option>
+                                    <option class='item-select-option'>PUT</option>
+                                    <option class='item-select-option'>DELETE</option>
+                                    <option class='item-select-option'>OPTIONS</option>
+                                    <option class='item-select-option'>HEAD</option>
+                                </select>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <!--
+            <div class="item-container">
+                <div class="item-container-header">Request Method <i id="request-type-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content">
+                    <div class="item tab-buttons">
+                        <a name="tab-1" id="GET" onclick="showHttpGetForm();" class="tab-button active">GET</a>
+                        <a name="tab-1" id="POST" onclick="showJsonPostForm();" class="tab-button">POST</a>
+                        <a name="tab-1" id="PUT" onclick="showJsonPostForm();" class="tab-button">PUT</a>
+                        <a name="tab-1" id="DELETE" onclick="showJsonPostForm();" class="tab-button">DEL</a>
+                        <a name="tab-1" id="OPTIONS" onclick="showJsonPostForm();" class="tab-button">OPT</a>
+                        <a name="tab-1" id="HEAD" onclick="showHttpGetForm();" class="tab-button">HEAD</a>
+                    </div>
+                </div>
+            </div>
+            -->
+                <div class="item-container">
+                    <!-- field to enter name of the request -->
+                    <div class="item-container-header">Display Name <i id="request-name-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div id='HttpGetFields' class="item-container-content">
+                        <label class="item">
+                            <div class="item-input-wrapper">
+                                <input id="displayedName" maxlength="30" type="text" class="item-input" name="input-1">
+                            </div>
+                        </label>
+                    </div>
+                    <!--
+        <div class="item-container-footer">
+          Enter the name of the request that will be displayed on your pebble. Shorten as necessary so that it fits on your pebble screen. Maximum length is 30 characters.
+        </div>
+      -->
+                </div>
+                <!-- HTTP Endpoint Form -->
+                <div class="item-container">
+                    <div class="item-container-header">Endpoint URL <i id="endpoint-url-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div id='HttpGetFields' class="item-container-content">
+                        <label class="item">
+                            <div class="item-input-wrapper">
+                                <input id="httpGetUrlInput" type="url" class="item-input" name="input-1">
+                            </div>
+                        </label>
+                    </div>
+                    <!--
+        <div class="item-container-footer">
+          An HTTP GET request will be sent to the URL entered above. Ensure that the webserver is listening on the port and context specified.
+        </div>
+      -->
+                </div>
+                <!-- Header Form -->
+                <div class="item-container">
+                    <div class="item-container-header">Custom Headers (Optional) <i id="headers-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div id="headerList" style="border-top: 1px solid #A12E36; background-color: #FFFAED;">
+                    </div>
+                    <div style="text-align: center;clear: both; border-top: none;" class="item-container-content">
+                        <label onclick="showAddHeaderForm();" id="header-add3" style="padding: 2px;font-weight: bold;font-size: .8em; color:#A12E37;">Add Header</label>
+                    </div>
+                    <!--
+        <div class="item-container-footer">
+        </div>
+      -->
+                </div>
+                <div id="headerAddFields" class="item-container" style="z-index: 11; position: absolute; width: 100%;">
+                    <div class="item-container-content" style="">
+                        <div class="item-container-header" id="addHeaderLabel" style="font-weight: bold;font-size:14px; margin: 10px; ">ADD HEADER</div>
+                        <div class="item-input-wrapper" style="border: 1px solid #A12E37; margin: 10px;"></div>
+                        <div class="item-input-wrapper" style="margin:20px;">
+                            <input id="headerKeyInput" type="text" class="item-input" name="input-1" placeholder="Key" style="font-size:14px;" \>
+                        </div>
+                        <div class="item-input-wrapper" style="margin:20px;">
+                            <input id="headerValInput" type="text" class="item-input" name="input-1" placeholder="Value" style="font-size:14px;" \>
+                        </div>
+                        <div class="item-input-wrapper" style="border: 1px solid #A12E37; margin: 10px;"></div>
+                        <div class="item-container">
+                            <div class="button-container">
+                                <input id="createHeaderButton" onclick="addHeader($('#headerKeyInput').val(),$('#headerValInput').val());" type="button" class="item-button" value="Create" style="font-weight: bold;font-size:14px; padding: 10px; margin: 10px;">
+                                <input id="updateHeaderButton" onclick="updateHeader($('#headerKeyInput').val(),$('#headerValInput').val());" type="button" class="item-button" value="Update" style="font-weight: bold;font-size:14px; padding: 10px; margin: 10px;">
+                                <input id="removeHeaderButton" onclick="removeHeader($('#headerKeyInput').val());" type="button" class="item-button" value="Remove" style="font-weight: bold;font-size:14px; padding: 10px; margin: 10px;">
+                                <input id="cancelHeaderButton" onclick="hideAddHeaderForm();" type="button" class="item-button" value="Cancel" style="font-weight: bold;font-size:14px; padding: 10px; margin: 10px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-container">
+                    <div class="item-container-header">Content-Type <i id="content-type-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content">
+                        <label class="item">
+                            <div class="item-input-wrapper" style="height:25px;">
+                                <select id='contentTypeList' name='select-1' class='item-select'>
+                                    <option class='item-select-option'>application/x-www-form-urlencoded</option>
+                                    <option class='item-select-option'>application/json</option>
+                                    <option class='item-select-option'>text/plain</option>
+                                </select>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <!-- JSON POST Form -->
+                <div id='JsonPostFields' class="item-container">
+                    <div class="item-container-header">Enter JSON content <i id="json-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content">
+                        <label class="item">
+                            <div class="item-input-wrapper" style="height: 100px;">
+                                <label id="validationFeedbackLabel" style="position: absolute; top: 50%;transform: translateY(-50%);"></label>
+                                <textarea id="jsonPostJsonInput" style="height: 100px;" type="text" class="item-input" name="input-1"></textarea>
+                                <input id="checkJsonButton" onclick="if(verifyJson($('#jsonPostJsonInput').val(),true)){animateGreen($('#jsonPostJsonInput'));}else{animateRed($('#jsonPostJsonInput'));};" type="button" class="item-button item-input-button" value="Check Format" style="top: 70px; right: 20px; width: 120px;">
+                            </div>
+                        </label>
+                    </div>
+                    <!--
+        <div class="item-container-footer">
+          Enter the JSON string above. Check the formatting of your input by clicking "Check Format". When checking format, the input field will flash green to indicate that the input is valid. Red means invalid. Duh.
+        </div>
+      -->
+                </div>
+            </div>
+            <div id="responseFields">
+                <div class="item-container">
+                    <div class="item-container-header">Notification Style <i id="response-notification-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content">
+                        <label class="item" style="font-size: 12px; color:#A12E37;">
+                            Receive response in a notification
+                            <input id="notificationCheckbox" type="checkbox" class="item-toggle" name="toggle-1" checked>
+                        </label>
+                    </div>
+                </div>
+                <div class="item-container">
+                    <div class="item-container-header">Response Content <i id="response-content-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                    <div class="item-container-content">
+                        <label class="item">
+                            <div class="item-input-wrapper" style="height:25px;">
+                                <select id='responseContentList' name='select-1' class='item-select'>
+                                    <option class='item-select-option'>Status Code</option>
+                                    <option class='item-select-option'>Body</option>
+                                </select>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div id="server-tooltip"></div>
+            <!--
+            <div class="item-container">
+                <div class="button-container">
+                    <input id="testButton" onclick="testHttp();" type="button" class="item-button" value="Test">
+                </div>
+            </div>
+            -->
+            <div class="item-container">
+                <div class="button-container">
+                    <input id="createNewButton" onclick="createNewEntry();" type="button" class="item-button" value="Save Request">
+                    <input id="modifyExistingButton" onclick="modifyExistingEntry();" type="button" class="item-button" value="Save Changes">
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="button-container">
+                    <input onclick="showModifyDisplay();" type="button" class="item-button" value="Cancel">
+                </div>
+            </div>
+            <!--
+            <div id="testResultsContainer" class="item-container">
+                <div class="item-container-header">HTTP Response <i id="http-response-tooltip" class="glyphicon glyphicon-info-sign glyphicon-offset"></i></div>
+                <div class="item-container-content">
+                    <div id="testResults" class="item"></div>
+                </div>
+            </div>
+            <br>
+            <br>
+            -->
+        </div>
+        <!-- The submit button -->
+        <div id="pebbleSaveButton">
+            <div class='item-container'>
+                <div class='button-container'>
+                    <input onclick="sendClose(true);" type='button' class='item-button' value='Save and Exit'>
+                </div>
+            </div>
+        </div>
+        <!--
+    <iframe id="framer" style="width:500px;height:500px;" target="asdf" src="http://www.google.com"></iframe>
+    <div id="pebbleSaveButton" class='item-container'>
+      <div class='button-container'>
+        <input onclick="localStorage.clear();" type='button' class='item-button' value='Delete LocalStoragee'>
+      </div>
+    </div>
+  -->
+        <script src='./bower_components/Slate/dist/js/slate.min.js'></script>
+        <script src='./js/jquery.simpletip-1.3.1.min.js'></script>
+        <script src='./js/jquery.nestable.js'></script>
+        <script src='./js/clipboard.min.js'></script>
+        <script src="./js/alertify.js"></script>
+        <script src="./js/colors.js"></script>
+        <script src="./js/jqColorPicker.min.js"></script>
+        <script src='./js/main.js?v4.0.0'></script>
+        <script src='./js/ui.js?v4.0.0'></script>
+        <script src='./js/util.js?v4.0.0'></script>
+        <script src="./js/less.min.js"></script>
+    </div>
+    </div>
+    <br>
+    <br>
+    <div id="footer" class="item-container-content" style="display: none;">
+        <p class="footer-text">© Sean Konagaya 2014-2016. All rights reserved</p>
+        <p class="footer-text"><a href="mailto:swkonagaya@gmail.com">Contact</a> | <a onclick="leavingPageWarning('https://github.com/skonagaya/HTTP-Push');">Github</a>
+            <br>
+    </div>
+</body>
+
+</html>
