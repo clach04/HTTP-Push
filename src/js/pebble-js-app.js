@@ -20,10 +20,11 @@ function includesJson(method) {
 function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, method, contenttype, headers, notify, response) {
 
     var xhr = new XMLHttpRequest();
-    xhr.timeout = 10000;  // 10 secs timeout TODO make configurable
+    xhr.timeout = 2 * 1000;  // 2 secs timeout - TODO make this configurable and stored in localStorage
 
-    console.log("contenttype: " + contenttype);
+    console.log("sendHttpRequest() contenttype: " + contenttype);
     console.log("headers: " + JSON.stringify(headers));
+    console.log("xhr.timeout: " + xhr.timeout.toString());
 
     // if content-type is specified in the headers, 
     // then overwrite contenttype variable
