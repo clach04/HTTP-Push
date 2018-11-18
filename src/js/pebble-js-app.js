@@ -20,7 +20,7 @@ function includesJson(method) {
 function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, method, contenttype, headers, notify, response) {
 
     var xhr = new XMLHttpRequest();
-    xhr.timeout = 10000;
+    xhr.timeout = 10000;  // 10 secs timeout
 
     console.log("contenttype: " + contenttype);
     console.log("headers: " + JSON.stringify(headers));
@@ -44,12 +44,17 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
         }
     }
 
+    xhr.ontimeout = function (e) {
+        // XMLHttpRequest timed out. Do something here.
+        console.log("XMLHttpRequest timed out");
+        sendHttpResponseToPebble(requestname, "!TIME OUT!", folderIndex, rowIndex, notify);  // include timeout time information?
+    };
 
     if (includesJson(method)) {
 
         xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                console.log("Received response from " + method + ":")
+            if (xhr.readyState == 4  && this.status == 200) {  // TODO else "error"
+                console.log("onreadystatechange Received response from " + method + ":")
                 console.log(xhr.responseText);
 
                 // per v4.0.0
@@ -88,9 +93,12 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
         }
     } else { // METHOD JSON GET
         xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
+            if (xhr.readyState == 4 && this.status == 200) {
                 console.log("Received response from " + method + ": ");
+                console.log("xhr.responseText");
                 console.log(xhr.responseText);
+                console.log("xhr.status.toString()");
+                console.log(xhr.status.toString());
 
                 // per v4.0.0
                 var responseText = response == "Status Code" ? "Status: " + xhr.status.toString() : JSON.stringify(xhr.responseText);
@@ -122,7 +130,7 @@ Pebble.addEventListener('showConfiguration', function() {
 
     // https upgrade with v4.0. use iFrames trick to migrate user localStorage
     // this is the url that hosts user's configuration.
-    var url = 'http://skonagaya.github.io';
+    var url = 'http://clach04.github.io/pebble-http-push/';
     //var url = 'http://4521b499.ngrok.io';
 
     console.log("localStorage: " + localStorage.getItem("array"));
@@ -355,6 +363,14 @@ function sendListToPebble(listArray, action) {
     }
 }
 
+
+//  from https://stackoverflow.com/a/48613926
+/*
+function getFuncName() {
+   return getFuncName.caller.name
+}
+*/
+
 // global variables used to chunk the data stream to pebble watch.
 var chunkIndex = 0;
 var listChunks = null;
@@ -370,7 +386,8 @@ function sendChunkToPebble(listString, listSize, listStringLength, action) {
     dict.KEY_SIZE = listSize;
     dict.KEY_CHUNK_SIZE = listStringLength;
 
-    console.log('Sending dict: ' + JSON.stringify(dict));
+    //console.log(getFuncName());
+    console.log('sendChunkToPebble Sending dict: ' + JSON.stringify(dict));
 
     Pebble.sendAppMessage(dict, function() {
         console.log('Successfully sent empty list to pebble');
@@ -391,7 +408,8 @@ function sendHttpResponseToPebble(requestName, responseStr, folderIndex, rowInde
     dict['KEY_ACTION'] = "response"; // command that tells the watch what to do (chunk / update / display response)
     dict['KEY_INDEX'] = rowIndex; // index of the request which requires action such as display http response
     dict['KEY_FOLDER_INDEX'] = folderIndex; // index of the folder which requires action
-    console.log('Sending dict: ' + JSON.stringify(dict));
+    //console.log(getFuncName());
+    console.log('sendHttpResponseToPebble Sending dict: ' + JSON.stringify(dict));
 
     // this is pebble code to initiated the bluetooth communication
     Pebble.sendAppMessage(dict, function() {
@@ -588,3 +606,4 @@ Pebble.addEventListener("appmessage",
         }
     }
 );
+
