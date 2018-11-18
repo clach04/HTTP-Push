@@ -20,7 +20,7 @@ function includesJson(method) {
 function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, method, contenttype, headers, notify, response) {
 
     var xhr = new XMLHttpRequest();
-    xhr.timeout = 10000;  // 10 secs timeout
+    xhr.timeout = 10000;  // 10 secs timeout TODO make configurable
 
     console.log("contenttype: " + contenttype);
     console.log("headers: " + JSON.stringify(headers));
@@ -52,7 +52,7 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
 
     if (includesJson(method)) {
 
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function() { // TODO refactor to use only one event function
             if (xhr.readyState == 4  && this.status == 200) {  // TODO else "error"
                 console.log("onreadystatechange Received response from " + method + ":")
                 console.log(xhr.responseText);
