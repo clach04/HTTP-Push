@@ -1,5 +1,7 @@
 #include <pebble.h>
 #include <vector.h>
+// TODO add support for configurable http timeout (in millisecs)
+// TODO add support for configurable app timeout (in secs) before auto exiting application
 
 #define KEY_LIST 0
 #define KEY_SIZE 1
