@@ -77,7 +77,7 @@ static GColor highlightColor;
 static GColor statusBarColor;
 static bool backgroundIsDark = false;
 static bool showFolderIcon = false;
-static bool showStatusBar = false;
+static bool showStatusBar = true;
 
 // apng
 static GBitmap *s_bitmap = NULL;
