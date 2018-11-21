@@ -1,11 +1,35 @@
+//settings used for geolocation
+var locationOptions = {
+  enableHighAccuracy: false, 
+  maximumAge: 10000, 
+  timeout: 10000
+};
 
+var latlong;
+
+//track the location so we can send it with the request
+Pebble.addEventListener('ready', function(e) {
+  locationWatcher = window.navigator.geolocation.watchPosition(fetch_location_data, fetch_location_error, locationOptions);
+});
+
+function fetch_location_data(pos) {
+  latlong = pos.coords.latitude + "," + pos.coords.longitude;
+}
+
+function fetch_location_error(err) {
+  console.log(err);
+  latlong = "unavailable";
+}
 
 function sendHttpRequest(ToUrl,withJson,index) {
-
+  
+  console.log('Value of latlong : '+latlong);
+  
   var xhr = new XMLHttpRequest();
   xhr.timeout = 10000;
-
+  
   if (withJson != "") {
+    
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
           console.log("Received response from POST:")
@@ -15,36 +39,23 @@ function sendHttpRequest(ToUrl,withJson,index) {
     }
     var strToJson = JSON.parse(withJson);
     xhr.open('POST', ToUrl, true);
-
+    
     // Have to to XMLHttpRequest because we dont have jquery :(
     // Testing was done via jquery ajax so results MAY be different
     // Particularly the request content-type (json vs form)
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
     var parameterizedUrl = Object.keys(strToJson).map(function(k) {
-      return encodeURIComponent(k) + '=' + encodeURIComponent(strToJson[k])
+      //look for keyword value #latlong# and if it exists, replace the value with current lat/long
+      if (strToJson[k] == "#latlong#") {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(latlong);
+      }else{
+        return encodeURIComponent(k) + '=' + encodeURIComponent(strToJson[k]);
+      }
     }).join('&');
     console.log("XMLHttpRequest sending : " + parameterizedUrl);
     xhr.send(parameterizedUrl);
-    /*
-    $.ajax({
-      method: "POST",
-      url: ToUrl,
-      data: JSON.parse(withJson),
-      dataType: "json",
-      success: function(data){
-        console.log("Successfully sent POST"); 
-        console.log("Results: " + JSON.stringify(data));
-      },
-      failure: function(errMsg) {
-        console.log("Failed to send POST");
-        console.log("Results: " + JSON.stringify(errMsg));
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        console.log("HTTP POST sent: ")
-        console.log(jqXHR);
-      }
-    });
-*/
+    
   } else {
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
@@ -55,30 +66,14 @@ function sendHttpRequest(ToUrl,withJson,index) {
     }
     xhr.open('GET', ToUrl, true);
     xhr.send(null);
-    /*
-    $.ajax({
-      method: "GET",
-      url: ToUrl,
-      success: function(data){
-        console.log("Successfully sent GET");
-        console.log("Results: " + JSON.stringify(data));
-      },
-      failure: function(errMsg) {
-          alert(errMsg);
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        console.log("HTTP GET sent: ")
-        console.log(jqXHR);
-      }
-    });
-*/
   }
 }
 
 Pebble.addEventListener('showConfiguration', function() {
   //var url = 'http://127.0.0.1:8080';
   //var url = 'http://1c570efd.ngrok.io';
-  var url = 'http://skonagaya.github.io/';
+  //var url = 'http://skonagaya.github.io/';
+  var url = 'http://cv.clineranch.net/HTTP-Push-config/';
 
   console.log('Showing configuration page: ' + url);
 
@@ -178,6 +173,7 @@ Pebble.addEventListener("appmessage",
       console.log("Found existing list. Loading localStorage:");
       console.log(localStorage['array']);
       var currentList = JSON.parse(localStorage['array']);
+  
       sendHttpRequest(
         currentList[selectedIndex]["endpoint"],
         currentList[selectedIndex]["json"],
