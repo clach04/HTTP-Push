@@ -20,7 +20,7 @@
 
 static const char VERSION[] = "4.0.0";
 
-static const char DEBUG_ENABLED = false;
+static const char DEBUG_ENABLED = true;  // clach04 debug
 static const char RESET_DATA = false;
 
 // Calculate the size of the buffer you require by summing the sizes of all 
@@ -77,7 +77,8 @@ static GColor highlightColor;
 static GColor statusBarColor;
 static bool backgroundIsDark = false;
 static bool showFolderIcon = false;
-static bool showStatusBar = false;
+//static bool showStatusBar = false;
+static bool showStatusBar = true; // clach04 debug, change default (not changing default in config will resultin odd looking scroll area)
 
 // apng
 static GBitmap *s_bitmap = NULL;
@@ -956,7 +957,9 @@ static void update_menu_data(int stringSize) {
         APP_LOG(APP_LOG_LEVEL_DEBUG, "1) ListString %s\n",listString);
       }
 
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "showStatusBar %d", (int) showStatusBar);  // clach04 debug
       showStatusBar = strcmp(showStatusBarStr, "0")==0 ? 0 : 1;
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "showStatusBar NOW %d", (int) showStatusBar);  // clach04 debug
 
       parseSuccessful = true;
     } /*else if (startsWith(listString, "_FL_")) { // Set folder Index List
@@ -998,14 +1001,29 @@ static void update_menu_data(int stringSize) {
   update_colors();
   #endif
 
+  // FIXME update bounds, if statusbar has been enabled.disabled (i.e. changed state_ need to update view size)
+  // HOwever, parsing occurs AFTER windows/layers created
+  {
+	int statusBarOffset = showStatusBar ? STATUS_BAR_LAYER_HEIGHT : 0;
+
+	Layer *window_layer = window_get_root_layer(s_menu_window);
+	GRect window_bounds = layer_get_bounds(window_layer);
+	GRect bounds = GRect(0, statusBarOffset, window_bounds.size.w, window_bounds.size.h - statusBarOffset);
+
+
   if (showStatusBar) {
     if (DEBUG_ENABLED)
       APP_LOG(APP_LOG_LEVEL_DEBUG, "show status bar");
     layer_set_hidden(status_bar_layer_get_layer(status_bar), false);
+    //layer_set_frame(scroll_layer_get_layer(s_scroll_layer), bounds); // well this crashes
+    //layer_set_bounds(scroll_layer_get_layer(s_scroll_layer), bounds); // well this crashes
+    //layer_set_bounds(s_scroll_layer, bounds);  // and this doesn't compile
   } else {
     if (DEBUG_ENABLED)
       APP_LOG(APP_LOG_LEVEL_DEBUG, "hide status bar");
     layer_set_hidden(status_bar_layer_get_layer(status_bar), true);
+    //layer_set_frame(scroll_layer_get_layer(s_scroll_layer), bounds); // ??
+  }
   }
 
   if (DEBUG_ENABLED)
@@ -1715,6 +1733,9 @@ static void menu_window_load(Window *window) {
   Stack_Init(&menuLayerStack,listSize); 
 
   int statusBarOffset = showStatusBar ? STATUS_BAR_LAYER_HEIGHT : 0;
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "showStatusBar %d", (int) showStatusBar);  // clach04 debug
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "statusBarOffset %d", (int) statusBarOffset);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "STATUS_BAR_LAYER_HEIGHT %d", (int) STATUS_BAR_LAYER_HEIGHT);
 
   Layer *window_layer = window_get_root_layer(window);
   GRect window_bounds = layer_get_bounds(window_layer);
