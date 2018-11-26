@@ -47,6 +47,7 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
 
     xhr.ontimeout = function (e) {
         // XMLHttpRequest timed out. Do something here.
+	    // NOTE this does NOT fire under pebble-js (android) when dns lookup failure occurs
         console.log("XMLHttpRequest timed out");
         sendHttpResponseToPebble(requestname, "!TIME OUT!", folderIndex, rowIndex, notify);  // include timeout time information?
     };
