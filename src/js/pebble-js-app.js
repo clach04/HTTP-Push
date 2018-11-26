@@ -51,19 +51,23 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
         sendHttpResponseToPebble(requestname, "!TIME OUT!", folderIndex, rowIndex, notify);  // include timeout time information?
     };
 
+    xhr.onload = function () {
+        // Request finished. Do processing here.
+	console.log("onload() received response from " + method + ":")
+	console.log("xhr.responseText");
+	console.log(xhr.responseText);
+	console.log("xhr.status.toString()");
+	console.log(xhr.status.toString());
+
+	// per v4.0.0
+	var responseText = response == "Status Code" ? "Status Code: " + xhr.status.toString() : JSON.stringify(xhr.responseText);
+	sendHttpResponseToPebble(requestname, responseText, folderIndex, rowIndex, notify);
+    };
+
+	console.log("Using method: " + method);
+	console.log("Using ToUrl: " + ToUrl);
     if (includesJson(method)) {
-
-        xhr.onreadystatechange = function() { // TODO refactor to use only one event function
-            if (xhr.readyState == 4  && this.status != 0) {  // TODO else "error"
-                console.log("onreadystatechange Received response from " + method + ":")
-                console.log(xhr.responseText);
-
-                // per v4.0.0
-                var responseText = response == "Status Code" ? "Status Code: " + xhr.status.toString() : JSON.stringify(xhr.responseText);
-                sendHttpResponseToPebble(requestname, responseText, folderIndex, rowIndex, notify);
-
-            }
-        };
+	console.log("includesJson");
 
         xhr.open(method, ToUrl, true);
 
@@ -93,22 +97,9 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
             sendHttpResponseToPebble(requestname, "Server Error", folderIndex, rowIndex, notify);
         }
     } else { // METHOD JSON GET
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && this.status != 0) {
-                console.log("Received response from " + method + ": ");
-                console.log("xhr.responseText");
-                console.log(xhr.responseText);
-                console.log("xhr.status.toString()");
-                console.log(xhr.status.toString());
+	console.log("NOT includesJson");
 
-                // per v4.0.0
-                var responseText = response == "Status Code" ? "Status: " + xhr.status.toString() : JSON.stringify(xhr.responseText);
-                sendHttpResponseToPebble(requestname, responseText, folderIndex, rowIndex, notify);
-            }
-        }
         xhr.open(method, ToUrl, true);
-        console.log("Using method: " + method);
-        console.log("Using ToUrl: " + ToUrl);
         try {
             if (!overrideContentType) {
                 xhr.setRequestHeader('Content-Type', contenttype);
