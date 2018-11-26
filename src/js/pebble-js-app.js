@@ -54,7 +54,7 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
     if (includesJson(method)) {
 
         xhr.onreadystatechange = function() { // TODO refactor to use only one event function
-            if (xhr.readyState == 4  && this.status == 200) {  // TODO else "error"
+            if (xhr.readyState == 4  && this.status != 0) {  // TODO else "error"
                 console.log("onreadystatechange Received response from " + method + ":")
                 console.log(xhr.responseText);
 
@@ -94,7 +94,7 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
         }
     } else { // METHOD JSON GET
         xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && this.status == 200) {
+            if (xhr.readyState == 4 && this.status != 0) {
                 console.log("Received response from " + method + ": ");
                 console.log("xhr.responseText");
                 console.log(xhr.responseText);
