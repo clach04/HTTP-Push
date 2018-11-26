@@ -3,7 +3,7 @@
     "shortName": "HTTP Push",
     "longName": "HTTP Push",
     "companyName": "Sean Konagaya",
-    "versionLabel": "4.4",
+    "versionLabel": "4.5",
     "sdkVersion": "3",
     "targetPlatforms": ["aplite", "chalk", "basalt", "emery", "diorite"],
     "watchapp": {
