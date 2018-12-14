@@ -20,30 +20,12 @@ function includesJson(method) {
 function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, method, contenttype, headers, notify, response) {
 
     var xhr = new XMLHttpRequest();
-    xhr.timeout = 2 * 1000;  // 2 secs timeout - TODO make this configurable and stored in localStorage
+    //xhr.timeout = 2 * 1000;  // 2 secs timeout - TODO make this configurable and stored in localStorage
+    xhr.timeout = 4 * 1000;  // 2 secs timeout - TODO make this configurable and stored in localStorage
 
     console.log("sendHttpRequest() contenttype: " + contenttype);
     console.log("headers: " + JSON.stringify(headers));
     console.log("xhr.timeout: " + xhr.timeout.toString());
-
-    // if content-type is specified in the headers, 
-    // then overwrite contenttype variable
-    var overrideContentType = false;
-
-    // append all the headers in the request
-    for (var i = 0; i < headers.length; i++) {
-        for (var key in headers[i]) {
-            key = key.trim();
-            val = headers[i][key].trim();
-            if (key && val) {
-                console.log("Setting header: " + key + ": " + val);
-                xhr.setRequestHeader(key, val);
-            }
-            if (key.toLowerCase() == "content-type") {
-                overrideContentType = true;
-            }
-        }
-    }
 
     xhr.ontimeout = function (e) {
         // XMLHttpRequest timed out. Do something here.
@@ -65,12 +47,32 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
 	sendHttpResponseToPebble(requestname, responseText, folderIndex, rowIndex, notify);
     };
 
+    // if content-type is specified in the headers,
+    // then overwrite contenttype variable
+    var overrideContentType = false;
+
+    xhr.open(method, ToUrl, true);
+
+    // append all the headers in the request (after open)
+    for (var i = 0; i < headers.length; i++) {
+        for (var key in headers[i]) {
+            key = key.trim();
+            val = headers[i][key].trim();
+            if (key && val) {
+                console.log("Setting header: " + key + ": " + val);
+                xhr.setRequestHeader(key, val);
+            }
+            if (key.toLowerCase() == "content-type") {
+                overrideContentType = true;
+            }
+        }
+    }
+
 	console.log("Using method: " + method);
 	console.log("Using ToUrl: " + ToUrl);
+
     if (includesJson(method)) {
 	console.log("includesJson");
-
-        xhr.open(method, ToUrl, true);
 
         if (contenttype == "application/x-www-form-urlencoded") {
             // converts json body to a parameterized string
@@ -100,7 +102,6 @@ function sendHttpRequest(requestname, ToUrl, withJson, folderIndex, rowIndex, me
     } else { // METHOD JSON GET
 	console.log("NOT includesJson");
 
-        xhr.open(method, ToUrl, true);
         try {
             if (!overrideContentType) {
                 xhr.setRequestHeader('Content-Type', contenttype);
